@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class CapybaraBehaviors : MonoBehaviour
@@ -28,7 +29,21 @@ public class CapybaraBehaviors : MonoBehaviour
   public bool IsDragged
   {
     get { return _isDragged; }
-    set { _isDragged = value; }
+    set
+    {
+      _isDragged = value;
+
+      if (_isDragged)
+      {
+        StopAllTweens();
+        transform.DOScale(_baseScale * 1.2f, 0.2f).SetEase(Ease.OutBack);
+      }
+      else
+      {
+        StopAllTweens();
+        transform.DOScale(_baseScale, 0.2f).SetEase(Ease.OutQuad);
+      }
+    }
   }
 
   [Header("Status de evolução")]
@@ -45,10 +60,17 @@ public class CapybaraBehaviors : MonoBehaviour
     set { _name = value; }
   }
 
+  private Vector3 _baseScale;
   private Vector2 _startPos;
   private Vector2 _targetPos;
   private bool _isMoving;
   private float _idleTimer;
+  private Tween _idleTween;
+
+  void Awake()
+  {
+    _baseScale = transform.localScale;
+  }
 
   // Start is called once before the first execution of Update after the MonoBehaviour is created
   void Start()
@@ -100,6 +122,9 @@ public class CapybaraBehaviors : MonoBehaviour
     }
 
     _isMoving = true;
+
+    StopAllTweens();
+    transform.DOScale(_baseScale, 0.1f);
   }
 
   private void HandleMove()
@@ -118,10 +143,36 @@ public class CapybaraBehaviors : MonoBehaviour
   {
     _idleTimer -= Time.deltaTime;
 
+    if (_idleTween == null || !_idleTween.IsActive())
+    {
+      _idleTween = transform.DOScale(new Vector3(_baseScale.x * 1.1f, _baseScale.y * 0.9f, _baseScale.z), 0.5f)
+        .SetLoops(-1, LoopType.Yoyo)
+        .SetEase(Ease.InOutSine);
+    }
+
     if (_idleTimer <= 0)
     {
       SetNewDestination();
     }
+  }
+
+  public void StartIdleAfterFusion()
+  {
+    _isFusing = false;
+    _isMoving = false;
+    _startPos = transform.position;
+    _idleTimer = Random.Range(_minIdleTime, _maxIdleTime);
+  }
+
+  public void StopAllTweens()
+  {
+    _idleTween?.Kill();
+    transform.DOKill();
+  }
+
+  private void OnDestroy()
+  {
+    transform.DOKill();
   }
 
   private void OnDrawGizmosSelected()

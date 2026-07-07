@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using DG.Tweening;
 
 [System.Serializable]
 public class CapybaraEvolution
@@ -21,7 +22,6 @@ public class FusionManager : MonoBehaviour
 {
   [Header("Configurações de Interação")]
   [SerializeField] private LayerMask _spawnLayer;
-  [SerializeField] private float _fusionSpeed = 5f;
 
   [Header("Tabela de Evoluções")]
   [SerializeField] private List<CapybaraEvolution> _evolutionList;
@@ -139,17 +139,32 @@ public class FusionManager : MonoBehaviour
     capy1.IsDragged = false;
     capy2.IsFusing = true;
 
-    Vector2 centerPoint = (capy1.transform.position + capy2.transform.position) / 2f;
+    capy1.StopAllTweens();
+    capy2.StopAllTweens();
 
-    while (Vector2.Distance(capy1.transform.position, centerPoint) > 0.1f ||
-           Vector2.Distance(capy2.transform.position, centerPoint) > 0.1f)
-    {
-      capy1.transform.position = Vector2.MoveTowards(capy1.transform.position, centerPoint, _fusionSpeed * Time.deltaTime);
-      capy2.transform.position = Vector2.MoveTowards(capy2.transform.position, centerPoint, _fusionSpeed * Time.deltaTime);
-      yield return null;
-    }
+    Vector2 centerPoint = (capy1.transform.position + capy2.transform.position) / 2f;
+    Vector2 dir1 = ((Vector2)capy1.transform.position - centerPoint).normalized;
+    Vector2 dir2 = ((Vector2)capy2.transform.position - centerPoint).normalized;
+
+    // afastamento
+    float pullBackTime = 0.3f;
+    capy1.transform.DOMove((Vector2)capy1.transform.position + dir1 * 0.4f, pullBackTime).SetEase(Ease.OutQuad);
+    capy2.transform.DOMove((Vector2)capy2.transform.position + dir2 * 0.4f, pullBackTime).SetEase(Ease.OutQuad);
+
+    yield return new WaitForSeconds(pullBackTime);
+
+    // colisão forte
+    float dashTime = 0.15f;
+    capy1.transform.DOMove(centerPoint, dashTime).SetEase(Ease.InExpo);
+    Tween dash2 = capy2.transform.DOMove(centerPoint, dashTime).SetEase(Ease.InExpo);
+
+    yield return dash2.WaitForCompletion(); // espera eles baterem no meio
+
+    // camera shake
+    _mainCamera.DOShakePosition(0.2f, strength: 0.15f, vibrato: 10, randomness: 90, fadeOut: true);
 
     int currentLevel = capy1.EvolutionLevel;
+    GameObject survivor = null;
 
     if (currentLevel < _evolutionList.Count)
     {
@@ -157,7 +172,7 @@ public class FusionManager : MonoBehaviour
 
       if (evData.nextPrefab != null)
       {
-        Instantiate(evData.nextPrefab, centerPoint, Quaternion.identity);
+        survivor = Instantiate(evData.nextPrefab, centerPoint, Quaternion.identity);
         Destroy(capy1.gameObject);
         Destroy(capy2.gameObject);
       }
@@ -167,6 +182,7 @@ public class FusionManager : MonoBehaviour
         capy1.transform.position = centerPoint;
         Destroy(capy2.gameObject);
         capy1.IsFusing = false;
+        survivor = capy1.gameObject;
       }
     }
     else
@@ -175,6 +191,32 @@ public class FusionManager : MonoBehaviour
       capy1.transform.position = centerPoint;
       Destroy(capy2.gameObject);
       capy1.IsFusing = false;
+      survivor = capy1.gameObject;
+    }
+
+    // animação de conclusão com sucesso
+    if (survivor != null)
+    {
+      CapybaraBehaviors survivorBehavior = survivor.GetComponent<CapybaraBehaviors>();
+
+      // Impede que a capivara sobrevivente/nova tente andar durante o POP
+      if (survivorBehavior != null) survivorBehavior.IsFusing = true;
+
+      Vector3 baseScale = survivor.transform.localScale;
+      survivor.transform.localScale = Vector3.zero;
+      survivor.transform.DOScale(baseScale, 0.25f).SetEase(Ease.OutBack);
+
+      yield return new WaitForSeconds(0.25f); // Espera o POP terminar
+
+      // Libera a capivara e forçar a entrar em Squeeze/Idle
+      if (survivorBehavior != null)
+      {
+        survivorBehavior.StartIdleAfterFusion();
+      }
+    }
+    else
+    {
+      yield return new WaitForSeconds(0.25f);
     }
 
     _isFusionHappen = false;
