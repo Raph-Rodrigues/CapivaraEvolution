@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class CapybaraBehaviors : MonoBehaviour
 {
   [Header("Configurações de movimento")]
@@ -16,6 +17,34 @@ public class CapybaraBehaviors : MonoBehaviour
   [Tooltip("Distância de segurança para não encostar na parede")]
   [SerializeField] private float _obstacleOffset = 0.5f;
 
+  [Header("Debug da Fusão")]
+  [SerializeField] private bool _isFusing;
+  public bool IsFusing
+  {
+    get { return _isFusing; }
+    set { _isFusing = value; }
+  }
+  [SerializeField] private bool _isDragged;
+  public bool IsDragged
+  {
+    get { return _isDragged; }
+    set { _isDragged = value; }
+  }
+
+  [Header("Status de evolução")]
+  [SerializeField] private int _evolutionLevel = 0;
+  public int EvolutionLevel
+  {
+    get { return _evolutionLevel; }
+    set { _evolutionLevel = value; }
+  }
+  [SerializeField] private string _name = "Tier 1";
+  public string Name
+  {
+    get { return _name; }
+    set { _name = value; }
+  }
+
   private Vector2 _startPos;
   private Vector2 _targetPos;
   private bool _isMoving;
@@ -25,11 +54,14 @@ public class CapybaraBehaviors : MonoBehaviour
   void Start()
   {
     _startPos = transform.position;
+    _isFusing = false;
   }
 
   // Update is called once per frame
   void Update()
   {
+    if (IsFusing || _isDragged) return;
+
     if (_isMoving)
     {
       HandleMove();
