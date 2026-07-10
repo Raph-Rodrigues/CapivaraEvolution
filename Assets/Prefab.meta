@@ -1,6 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Prefab.meta
 guid: 37c1102686e71b520a0ec610ca5d5a0d
 folderAsset: yes
+========
+guid: aeb99a81db4a3024ebb9069483a200fb
+>>>>>>>> Rafael-DropCapivaras:Assets/Scenes/Jogo.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
