@@ -128,7 +128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 493537567}
-  - component: {fileID: 493537566}
+  - component: {fileID: 493537568}
   m_Layer: 0
   m_Name: Main
   m_TagString: Untagged
@@ -136,26 +136,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &493537566
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 493537565}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75d860288b1d7c045bacaf98b20b92a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CapivaraBoxDrops
-  BoxDropsCooldown: 10
-  BoxHeightOffSet: 10
-  LeftLimit: -10
-  RightLimit: 10
-  TopLimit: 5
-  BottomLimit: -5
-  DropBoxPrefab: {fileID: 4606399265985551937, guid: b0469edff7cd9584eae225ab475aff12, type: 3}
-  CapivaraPrefab: {fileID: 7369316211996127596, guid: db982e040cc04c74eb2e7f736cc352f4, type: 3}
 --- !u!4 &493537567
 Transform:
   m_ObjectHideFlags: 0
@@ -171,6 +151,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &493537568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 493537565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cdb86f1e0660ad4b9ff999814e84774, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoneyGeneration
+  tierMoneyGeneration: 050000000d000000000000000000000000000000
+  cooldown: 10
 --- !u!1 &1253953621
 GameObject:
   m_ObjectHideFlags: 0
