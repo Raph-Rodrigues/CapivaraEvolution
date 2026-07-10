@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -16,7 +17,7 @@ public class CapivaraBoxDrops : MonoBehaviour
     [SerializeField] private float BottomLimit = -5f;
     [Header("Prefabs")]
     [SerializeField] private GameObject DropBoxPrefab;
-    [SerializeField] private GameObject CapivaraPrefab;
+    [SerializeField] private List<GameObject> CapivaraPrefabs = new List<GameObject>();
 
     private float counter;
 
@@ -39,24 +40,35 @@ public class CapivaraBoxDrops : MonoBehaviour
         else if (counter <= 0)
         {
             counter = BoxDropsCooldown;
-            DropBox();
+
+            int chance = UnityEngine.Random.Range(1, 100);
+            
+            if (chance <= 5)
+            {
+                DropBox(6);
+            }
+            else
+            {
+                DropBox(0);
+            }
+            
         }
     }
 
-    void DropBox() // pega uma posição aleatória dentro dos limites e spawna a caixa com um offset para cima
+    void DropBox(int tier) // pega uma posição aleatória dentro dos limites e spawna a caixa com um offset para cima
     {
         float randomX = UnityEngine.Random.Range(LeftLimit, RightLimit);
         float randomY = UnityEngine.Random.Range(BottomLimit, TopLimit);
 
         GameObject spawnedBox = Instantiate(DropBoxPrefab);
         spawnedBox.transform.position = new Vector3(randomX, randomY + BoxHeightOffSet, 0);
-        StartCoroutine(BoxFalling(spawnedBox.transform, randomY));
+        StartCoroutine(BoxFalling(spawnedBox.transform, randomY, tier));
         
     }
     
-    void SpawnCapivara(GameObject box) // deleta caixa e spawna capivara no lugar dela
+    void SpawnCapivara(GameObject box, int tier) // deleta caixa e spawna capivara no lugar dela
     {
-        GameObject spawnedCapivara = Instantiate(CapivaraPrefab);
+        GameObject spawnedCapivara = Instantiate(CapivaraPrefabs[tier]);
         Vector2 spawnPos = box.transform.position;
 
         Destroy(box); // substituir por efeito de quebrar caixa depois
@@ -65,7 +77,7 @@ public class CapivaraBoxDrops : MonoBehaviour
         moneyScript.CapivaraAdded(spawnedCapivara);
     }
 
-    IEnumerator BoxFalling(Transform boxTransform, float randomY) // detecta quando a caixa chega no chão
+    IEnumerator BoxFalling(Transform boxTransform, float randomY, int tier) // detecta quando a caixa chega no chão
     {
         bool onGround = false;
 
@@ -77,7 +89,7 @@ public class CapivaraBoxDrops : MonoBehaviour
                 boxTransform.gameObject.GetComponent<Rigidbody2D>().gravityScale = 0f; // supõe que prefab da caixa tem rigidyBody para cair
                 boxTransform.gameObject.GetComponent<Rigidbody2D>().linearVelocityY = 0f;
                 yield return new WaitForSeconds(0.5f);
-                SpawnCapivara(boxTransform.gameObject);
+                SpawnCapivara(boxTransform.gameObject, tier);
             }
             yield return new WaitForSeconds(0.1f);
         }
@@ -85,5 +97,8 @@ public class CapivaraBoxDrops : MonoBehaviour
 
     }
 
-
+    public void DropCustomBox(int tier)
+    {
+        DropBox(tier);
+    }
 }

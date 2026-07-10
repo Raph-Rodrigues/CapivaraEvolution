@@ -20,8 +20,9 @@ public class CapybaraEvolution
 [RequireComponent(typeof(InputHandler))]
 public class FusionManager : MonoBehaviour
 {
-  [Header("Variavel do script")]
+  [Header("Variaveis externas")]
   [SerializeField] private MoneyGeneration moneyScript;
+  [SerializeField] private ShopManager shopScript;
 
   [Header("Configurações de Interação")]
   [SerializeField] private LayerMask _spawnLayer;
@@ -213,6 +214,23 @@ public class FusionManager : MonoBehaviour
       survivor.transform.localScale = Vector3.zero;
       survivor.transform.DOScale(baseScale, 0.25f).SetEase(Ease.OutBack);
       moneyScript.CapivaraAdded(survivor);
+
+      int survivorTier;
+
+      if (currentLevel + 1 > _evolutionList.Count)
+      {
+        survivorTier = currentLevel;
+      }
+      else
+      {
+        survivorTier = currentLevel + 1;
+      }
+
+      if (survivorTier == 1)
+      {
+        shopScript.SetShopEnable();
+      }
+      shopScript.NewUnlock(currentLevel);
 
       yield return new WaitForSeconds(0.25f); // Espera o POP terminar
 

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 3f87253f3ec0bc0429e7fae461dca7be
+guid: fb9ef578ee444c44ca295c825a8c5b75
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2119547498879234433
-    second: OrangeIcon_0
+      213: -230212805086525623
+    second: ShopIcon_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: OrangeIcon_0
+      name: ShopIcon_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 16
-        height: 19
+        width: 30
+        height: 27
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f7e4cb497cad592e0800000000000000
-      internalID: -2119547498879234433
+      spriteID: 947421a6cae1eccf0800000000000000
+      internalID: -230212805086525623
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      OrangeIcon_0: -2119547498879234433
+      ShopIcon_0: -230212805086525623
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
