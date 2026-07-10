@@ -5,8 +5,14 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/ExemploFusaoMovimento.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 0
+    path: Assets/Scenes/Menu.unity
+    guid: a073f089e5e1f80579afa6a4dfd72f7b
+  - enabled: 1
+    path: Assets/Scenes/Jogo.unity
+    guid: aeb99a81db4a3024ebb9069483a200fb
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
