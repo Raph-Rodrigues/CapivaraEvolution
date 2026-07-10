@@ -7,6 +7,7 @@ using UnityEngine.UIElements;
 public class CapivaraBoxDrops : MonoBehaviour
 {
     [Header("Configurações")]
+    [SerializeField] private MoneyGeneration moneyScript;
     [SerializeField] private float BoxDropsCooldown = 10f;
     [SerializeField] private float BoxHeightOffSet = 10f;
     [SerializeField] private float LeftLimit = -10f;
@@ -50,6 +51,7 @@ public class CapivaraBoxDrops : MonoBehaviour
         GameObject spawnedBox = Instantiate(DropBoxPrefab);
         spawnedBox.transform.position = new Vector3(randomX, randomY + BoxHeightOffSet, 0);
         StartCoroutine(BoxFalling(spawnedBox.transform, randomY));
+        
     }
     
     void SpawnCapivara(GameObject box) // deleta caixa e spawna capivara no lugar dela
@@ -60,6 +62,7 @@ public class CapivaraBoxDrops : MonoBehaviour
         Destroy(box); // substituir por efeito de quebrar caixa depois
 
         spawnedCapivara.transform.position = spawnPos;
+        moneyScript.CapivaraAdded(spawnedCapivara);
     }
 
     IEnumerator BoxFalling(Transform boxTransform, float randomY) // detecta quando a caixa chega no chão

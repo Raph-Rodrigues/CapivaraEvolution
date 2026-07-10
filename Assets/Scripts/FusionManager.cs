@@ -20,6 +20,9 @@ public class CapybaraEvolution
 [RequireComponent(typeof(InputHandler))]
 public class FusionManager : MonoBehaviour
 {
+  [Header("Variavel do script")]
+  [SerializeField] private MoneyGeneration moneyScript;
+
   [Header("Configurações de Interação")]
   [SerializeField] private LayerMask _spawnLayer;
 
@@ -177,6 +180,8 @@ public class FusionManager : MonoBehaviour
         survivor = Instantiate(evData.nextPrefab, centerPoint, Quaternion.identity);
         Destroy(capy1.gameObject);
         Destroy(capy2.gameObject);
+        moneyScript.CapivaraRemoved(capy1.gameObject);
+        moneyScript.CapivaraRemoved(capy2.gameObject);
       }
       else
       {
@@ -207,6 +212,7 @@ public class FusionManager : MonoBehaviour
       Vector3 baseScale = survivor.transform.localScale;
       survivor.transform.localScale = Vector3.zero;
       survivor.transform.DOScale(baseScale, 0.25f).SetEase(Ease.OutBack);
+      moneyScript.CapivaraAdded(survivor);
 
       yield return new WaitForSeconds(0.25f); // Espera o POP terminar
 
