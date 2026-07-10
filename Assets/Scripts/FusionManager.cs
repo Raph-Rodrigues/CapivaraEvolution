@@ -8,12 +8,12 @@ public class CapybaraEvolution
 {
   [Header("Capivara atual")]
   public string currentType;
-  public SpriteRenderer currentSpr;
+  public Sprite currentSpr;
   public GameObject currentPrefab;
 
   [Header("Evolução")]
   public string nextType;
-  public SpriteRenderer nextSpr;
+  public Sprite nextSpr;
   public GameObject nextPrefab;
 }
 
@@ -25,6 +25,7 @@ public class FusionManager : MonoBehaviour
 
   [Header("Tabela de Evoluções")]
   [SerializeField] private List<CapybaraEvolution> _evolutionList;
+  public List<CapybaraEvolution> EvolutionList => _evolutionList;
 
   private InputHandler _input;
   private Camera _mainCamera;
@@ -41,6 +42,7 @@ public class FusionManager : MonoBehaviour
   void Update()
   {
     if (_isFusionHappen) return;
+
     HandleDragAndDrop();
   }
 
