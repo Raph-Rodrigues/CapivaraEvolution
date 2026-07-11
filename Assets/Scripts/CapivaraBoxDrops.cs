@@ -18,6 +18,8 @@ public class CapivaraBoxDrops : MonoBehaviour
     [Header("Prefabs")]
     [SerializeField] private GameObject DropBoxPrefab;
     [SerializeField] private List<GameObject> CapivaraPrefabs = new List<GameObject>();
+    [SerializeField] private List<Sprite> particles = new List<Sprite>();
+    [SerializeField] private GameObject ParticlePrefab;
 
     private float counter;
 
@@ -45,7 +47,7 @@ public class CapivaraBoxDrops : MonoBehaviour
             
             if (chance <= 5)
             {
-                DropBox(6);
+                DropBox(5);
             }
             else
             {
@@ -70,9 +72,9 @@ public class CapivaraBoxDrops : MonoBehaviour
     {
         GameObject spawnedCapivara = Instantiate(CapivaraPrefabs[tier]);
         Vector2 spawnPos = box.transform.position;
-
+        //ParticleEffect(spawnPos);
         Destroy(box); // substituir por efeito de quebrar caixa depois
-
+        
         spawnedCapivara.transform.position = spawnPos;
         moneyScript.CapivaraAdded(spawnedCapivara);
     }
@@ -88,10 +90,15 @@ public class CapivaraBoxDrops : MonoBehaviour
                 onGround = true;
                 boxTransform.gameObject.GetComponent<Rigidbody2D>().gravityScale = 0f; // supõe que prefab da caixa tem rigidyBody para cair
                 boxTransform.gameObject.GetComponent<Rigidbody2D>().linearVelocityY = 0f;
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(0.1f);
+                Vector2 spawnPos = boxTransform.position;
+                ParticleEffect(spawnPos);
+                boxTransform.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+                yield return new WaitForSeconds(0.4f);
                 SpawnCapivara(boxTransform.gameObject, tier);
             }
             yield return new WaitForSeconds(0.1f);
+            
         }
         yield return 0;
 
@@ -99,6 +106,39 @@ public class CapivaraBoxDrops : MonoBehaviour
 
     public void DropCustomBox(int tier)
     {
-        DropBox(tier);
+        DropBox(tier+1);
+    }
+
+    private void ParticleEffect(Vector2 spawnPosition)
+    {
+        if (ParticlePrefab == null || particles.Count == 0) return;
+
+        GameObject effectGo = Instantiate(ParticlePrefab, spawnPosition, Quaternion.identity);
+        ParticleSystem ps = effectGo.GetComponent<ParticleSystem>();
+
+        if (ps != null)
+        {
+            var textureSheet = ps.textureSheetAnimation;
+            textureSheet.enabled = true;
+            textureSheet.mode = ParticleSystemAnimationMode.Sprites;
+
+            int spriteCount = textureSheet.spriteCount;
+            for (int i = spriteCount - 1; i >= 0; i--)
+            {
+                textureSheet.RemoveSprite(i);
+            }
+            foreach (Sprite sprite in particles)
+            {
+                if (sprite != null)
+                {
+                    textureSheet.AddSprite(sprite);
+                }
+            }
+
+            var mainModule = ps.main;
+            mainModule.stopAction = ParticleSystemStopAction.Destroy;
+            
+            ps.Play();
+        }
     }
 }
