@@ -10,8 +10,7 @@ public class TutorialStep1 : TutorialState
     public override void Enter()
     {
         DialogueTemplateInk.Instance.StartDialogue(controller.inkFiles[controller.textNumber++]);// 0 //texto inicial abordando q existem capivaras (?)
-        controller.dropScript.enabled = false;
-        controller.shopButton.interactable = false; //loja travada ate o final do tutorial
+        controller.dropScript.enabled = false; //trava o drop de capivaras momentaneamente
     }
 
     public override void Tick()

@@ -2,18 +2,19 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using DialogueSystem;
+using Unity.VisualScripting;
 
 public class TutorialController : MonoBehaviour
 {
     [Header("Objetos a serem sinalizados")]
+    public TutorialController controllerItself;
     public CapivaraBoxDrops dropScript; //para desativar e evitar capivaras a mais no tutorial
-    public FusionManager fusionScript; //para ficar de olho da primeira fusao
-    public GameObject moneyBar;
-    public Button shopButton;
+    public RectTransform moneyBar;
+    public GameObject buttonContainer;
+    public GameObject shopButton;
     public GameObject spotlightScreen;
     public GameObject capybara1;
     public GameObject capybara2;
-    public GameObject orange;
     
     [Header("Textos do tutorial")]
     public List<TextAsset> inkFiles;
@@ -25,6 +26,11 @@ public class TutorialController : MonoBehaviour
 
     private void Start()
     {
+        if(PlayerPrefs.GetInt("TutorialVisto", 0) != 0) 
+        {
+            controllerItself.enabled = false;
+            return;
+        }
         //dialogo de introducao
         ChangeState(new TutorialStep1(this));
     }
@@ -38,13 +44,11 @@ public class TutorialController : MonoBehaviour
     void OnEnable()
     {
         CapybaraEvent.OnCapybaraCreation += CapybaraFulfiller;
-        OrangeEvent.OnOrangeCreation += OrangeFulfiller;
     }
 
     void OnDisable()
     {
         CapybaraEvent.OnCapybaraCreation -= CapybaraFulfiller;
-        OrangeEvent.OnOrangeCreation -= OrangeFulfiller;
     }
 
     //mudanca de estado comum
@@ -72,12 +76,4 @@ public class TutorialController : MonoBehaviour
         }
     }
 
-    //laranja usada no tutorial
-    private void OrangeFulfiller(GameObject org)
-    {
-        if(orange == null)
-        {
-            orange = org;
-        }
-    }
 }

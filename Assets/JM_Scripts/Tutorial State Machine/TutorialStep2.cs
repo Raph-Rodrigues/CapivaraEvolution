@@ -18,13 +18,11 @@ public class TutorialStep2 : TutorialState
     {
         if(DialogueTemplateInk.Instance.IsDialogueActive) return;
         Debug.Log("Para aqui - Sem laranjas ainda");
-        //if(controller.orange == null) return; //espera o spawn da primeira laranja
 
         if(!controller.stepInAction)
         {
             controller.stepInAction = true;
             DialogueTemplateInk.Instance.StartDialogue(controller.inkFiles[controller.textNumber++]);// 2 //texto explicando sobre as capivaras droparem laranjas
-            //TutorialCursor.Instance.OutsideCanvasPointer(controller.orange.transform); //aponta pra laranja
         }
         else
         {
@@ -36,6 +34,7 @@ public class TutorialStep2 : TutorialState
 
                 if(controller.textNumber > 3)
                 {
+                    DOTween.Kill(controller.moneyBar);
                     if(isFading) return;
 
                     isFading = true;
@@ -49,6 +48,7 @@ public class TutorialStep2 : TutorialState
                 }
                 else
                 {
+                    TutorialCursor.Instance.CursorState(false);
                     initialColor.a = 0f; 
                     spotlightImage.color = initialColor;
 
@@ -56,6 +56,8 @@ public class TutorialStep2 : TutorialState
                     controller.spotlightScreen.transform.SetAsLastSibling();
                     controller.moneyBar.transform.SetAsLastSibling();
                     controller.shopButton.transform.SetAsFirstSibling();
+
+                    controller.moneyBar.DOScale(1.3f, 0.8f).SetLoops(-1, LoopType.Yoyo);
 
                     controller.spotlightScreen.SetActive(true);
 
