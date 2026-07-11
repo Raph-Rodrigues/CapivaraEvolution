@@ -55,7 +55,7 @@ public class TutorialStep2 : TutorialState
                     //destaque pra barra de laranjas
                     controller.spotlightScreen.transform.SetAsLastSibling();
                     controller.moneyBar.transform.SetAsLastSibling();
-                    controller.shopButton.transform.SetAsFirstSibling();
+                    controller.buttonContainer.transform.SetAsFirstSibling();
 
                     controller.moneyBar.DOScale(1.3f, 0.8f).SetLoops(-1, LoopType.Yoyo);
 

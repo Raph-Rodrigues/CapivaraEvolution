@@ -49,7 +49,6 @@ public class TutorialStep4 : TutorialState
                 controller.buttonContainer.transform.SetAsLastSibling();
                 controller.moneyBar.transform.SetAsFirstSibling();
 
-                controller.shopButton.SetActive(true);
 
                 spotlightImage.DOFade(0.8f, 0.5f);
                 

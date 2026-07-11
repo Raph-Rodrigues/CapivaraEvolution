@@ -11,7 +11,6 @@ public class TutorialController : MonoBehaviour
     public CapivaraBoxDrops dropScript; //para desativar e evitar capivaras a mais no tutorial
     public RectTransform moneyBar;
     public GameObject buttonContainer;
-    public GameObject shopButton;
     public GameObject spotlightScreen;
     public GameObject capybara1;
     public GameObject capybara2;
