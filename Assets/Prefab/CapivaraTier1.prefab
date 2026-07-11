@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 974279619554717772}
   - component: {fileID: 884069325207350087}
   - component: {fileID: 2512720238579046905}
+  - component: {fileID: 6822771117877200502}
   m_Layer: 7
   m_Name: CapivaraTier1
   m_TagString: Capivara
@@ -191,3 +192,15 @@ MonoBehaviour:
   _isDragged: 0
   _evolutionLevel: 0
   _name: Tier1
+--- !u!114 &6822771117877200502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3895929251125039855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ed28cc3994a89e4394e474b619e5489, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CapybaraEvent
