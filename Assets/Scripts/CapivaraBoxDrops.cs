@@ -106,7 +106,7 @@ public class CapivaraBoxDrops : MonoBehaviour
 
     public void DropCustomBox(int tier)
     {
-        DropBox(tier);
+        DropBox(tier+1);
     }
 
     private void ParticleEffect(Vector2 spawnPosition)
