@@ -1,0 +1,1 @@
+Mais uma capivara! Arraste uma capivara até outra igual e experimente fundí-las!

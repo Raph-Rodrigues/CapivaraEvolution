@@ -26,7 +26,7 @@ public class TutorialStep4 : TutorialState
 
             if(controller.textNumber > 6)
             {
-                DOTween.Kill(controller.moneyBar);
+                DOTween.Kill(controller.buttonContainer);
                 if(isFading) return;
 
                 isFading = true;
@@ -61,7 +61,7 @@ public class TutorialStep4 : TutorialState
         }
 
 
-        DialogueTemplateInk.Instance.StartDialogue(controller.inkFiles[controller.textNumber++]); // 5 // comenta sobre a fusao
+        if(controller.textNumber <= 5) DialogueTemplateInk.Instance.StartDialogue(controller.inkFiles[controller.textNumber++]); // 5 // comenta sobre a fusao
 
     }
 

@@ -426,7 +426,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3612556786632410337, guid: 8f2deff57a4b2474a956ac2b16c39454, type: 3}
       propertyPath: m_text
-      value: 'Capivara 4
+      value: 'Capi Magius
 
 
 '
@@ -2040,9 +2040,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3612556786632410337, guid: 8f2deff57a4b2474a956ac2b16c39454, type: 3}
       propertyPath: m_text
-      value: 'Capivara 3
-
-'
+      value: Capi Ladino
       objectReference: {fileID: 0}
     - target: {fileID: 3612556786632410337, guid: 8f2deff57a4b2474a956ac2b16c39454, type: 3}
       propertyPath: m_VerticalAlignment
@@ -2684,7 +2682,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3612556786632410337, guid: 8f2deff57a4b2474a956ac2b16c39454, type: 3}
       propertyPath: m_text
-      value: 'Capivara 4
+      value: 'Capi Bardo
 
 
 '
@@ -3340,7 +3338,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.76312256, y: -1.611206}
+  m_AnchoredPosition: {x: -0.7631836, y: -1.611206}
   m_SizeDelta: {x: 1151.6001, y: 662.56714}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1681119697
@@ -3529,13 +3527,13 @@ MonoBehaviour:
   capybara1: {fileID: 0}
   capybara2: {fileID: 0}
   inkFiles:
-  - {fileID: 4900000, guid: bb2ba8c122f7779418d0331c5fa42a0b, type: 3}
-  - {fileID: 4900000, guid: bb2ba8c122f7779418d0331c5fa42a0b, type: 3}
-  - {fileID: 4900000, guid: bb2ba8c122f7779418d0331c5fa42a0b, type: 3}
-  - {fileID: 4900000, guid: bb2ba8c122f7779418d0331c5fa42a0b, type: 3}
-  - {fileID: 4900000, guid: bb2ba8c122f7779418d0331c5fa42a0b, type: 3}
-  - {fileID: 4900000, guid: bb2ba8c122f7779418d0331c5fa42a0b, type: 3}
-  - {fileID: 4900000, guid: bb2ba8c122f7779418d0331c5fa42a0b, type: 3}
+  - {fileID: 4900000, guid: 419a3ae3d48d3dd45877e0136dcc0d6c, type: 3}
+  - {fileID: 4900000, guid: e0b8d0989ae5f9a498b5e0ed7ea92d5a, type: 3}
+  - {fileID: 4900000, guid: 009211c86587deb44813a4e71b7aa09e, type: 3}
+  - {fileID: 4900000, guid: 56c1d55201cdfa043ae2ab1fda92fffd, type: 3}
+  - {fileID: 4900000, guid: e600460aadcce1149a16172c2ebcd68b, type: 3}
+  - {fileID: 4900000, guid: 95f1cef88b2e5ee43a525d0b4e8b8296, type: 3}
+  - {fileID: 4900000, guid: d2438ff2f1a40ae42874d2a911482d99, type: 3}
   textNumber: 0
   stepInAction: 0
 --- !u!4 &1860333717
@@ -3757,7 +3755,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 8
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -4050,7 +4048,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: "Pr\xF3ximo"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4228,7 +4226,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3612556786632410337, guid: 8f2deff57a4b2474a956ac2b16c39454, type: 3}
       propertyPath: m_text
-      value: 'Capivara 2
+      value: 'Capi Guerreira
 
 '
       objectReference: {fileID: 0}

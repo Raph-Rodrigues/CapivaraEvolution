@@ -7,9 +7,9 @@ public class InputHandler : MonoBehaviour
   {
     get
     {
-      if (Mouse.current != null)
+      if (Pointer.current != null)
       {
-        return Mouse.current.position.ReadValue();
+        return Pointer.current.position.ReadValue();
       }
       return Vector2.zero;
     }
@@ -19,12 +19,12 @@ public class InputHandler : MonoBehaviour
   {
     get
     {
-      if (Mouse.current == null)
+      if (Pointer.current == null)
       {
         Debug.LogError("ALERTA: O Mouse não foi detectado! Verifique em Edit > Project Settings > Player > Active Input Handling e garanta que está como 'Input System Package (New)' ou 'Both'.");
         return false;
       }
-      return Mouse.current.leftButton.isPressed;
+      return Pointer.current.press.isPressed;
     }
   }
 
@@ -32,9 +32,9 @@ public class InputHandler : MonoBehaviour
   {
     get
     {
-      if (Mouse.current != null)
+      if (Pointer.current != null)
       {
-        return Mouse.current.leftButton.wasReleasedThisFrame;
+        return Pointer.current.press.wasReleasedThisFrame;
       }
       return false;
     }

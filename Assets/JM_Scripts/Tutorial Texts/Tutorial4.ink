@@ -1,0 +1,1 @@
+Essas laranjas serão sua moeda de troca e serão armazenadas aqui!

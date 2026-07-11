@@ -1,0 +1,1 @@
+Prontinho! Você acabou de descobrir a Capi Guerreira!

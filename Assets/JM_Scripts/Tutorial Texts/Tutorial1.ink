@@ -1,1 +1,1 @@
-﻿
+Bem-vindo à Capivolution! Aqui capivaras aparecerão de caixas a cada 10 segundos, vamos aguardar até a primeira aparecer.

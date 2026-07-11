@@ -1,0 +1,1 @@
+Nossa primeira capivara! Você pode arrastá-las pela tela, mas na maior parte do tempo elas ficarão andando por aí.
