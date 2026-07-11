@@ -5,10 +5,14 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+<<<<<<< HEAD
   - enabled: 0
     path: Assets/Scenes/ExemploFusaoMovimento.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 0
+=======
+  - enabled: 1
+>>>>>>> Raphael-MenuConfiguracoes
     path: Assets/Scenes/Menu.unity
     guid: a073f089e5e1f80579afa6a4dfd72f7b
   - enabled: 1
