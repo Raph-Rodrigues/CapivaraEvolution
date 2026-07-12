@@ -45,15 +45,8 @@ public class CapivaraBoxDrops : MonoBehaviour
 
             int chance = UnityEngine.Random.Range(1, 100);
             
-            if (chance <= 5)
-            {
-                DropBox(5);
-            }
-            else
-            {
-                DropBox(0);
-            }
-            
+
+            DropBox(0);
         }
     }
 
