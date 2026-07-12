@@ -16,7 +16,7 @@ public class CapybaraBehaviors : MonoBehaviour
   [Header("Configurações de Colisão com a Parede")]
   [SerializeField] private LayerMask _wallLayer;
   [Tooltip("Distância de segurança para não encostar na parede")]
-  [SerializeField] private float _obstacleOffset = 0.5f;
+  [SerializeField] private float _obstacleOffset = 0.2f;
 
   [Header("Debug da Fusão")]
   [SerializeField] private bool _isFusing;
@@ -35,13 +35,32 @@ public class CapybaraBehaviors : MonoBehaviour
 
       if (_isDragged)
       {
+        _lastValidPos = transform.position;
+
         StopAllTweens();
-        transform.DOScale(_baseScale * 1.2f, 0.2f).SetEase(Ease.OutBack);
+
+        transform.DORotate(Vector3.zero, 0.2f);
+        transform.DOScale(new Vector3(Mathf.Abs(_baseScale.x) * 1.2f, _baseScale.y * 1.2f, _baseScale.z), 0.2f).SetEase(Ease.OutBack);
       }
       else
       {
         StopAllTweens();
         transform.DOScale(_baseScale, 0.2f).SetEase(Ease.OutQuad);
+
+        if (!_isFusing)
+        {
+          Collider2D hitWall = Physics2D.OverlapCircle(transform.position, _obstacleOffset, _wallLayer);
+
+          if (hitWall != null)
+          {
+            transform.DOMove(_lastValidPos, 0.3f).SetEase(Ease.OutBack);
+            _startPos = _lastValidPos;
+          }
+          else
+          {
+            _startPos = transform.position;
+          }
+        }
       }
     }
   }
@@ -63,9 +82,13 @@ public class CapybaraBehaviors : MonoBehaviour
   private Vector3 _baseScale;
   private Vector2 _startPos;
   private Vector2 _targetPos;
+  private Vector2 _lastValidPos;
+
   private bool _isMoving;
   private float _idleTimer;
+
   private Tween _idleTween;
+  private Tween _moveTween;
 
   void Awake()
   {
@@ -124,7 +147,19 @@ public class CapybaraBehaviors : MonoBehaviour
     _isMoving = true;
 
     StopAllTweens();
+
+    if (dir.x < 0)
+    {
+      _baseScale.x = -Mathf.Abs(_baseScale.x);
+    }
+    else if (dir.x > 0)
+    {
+      _baseScale.x = Mathf.Abs(_baseScale.x);
+    }
+
     transform.DOScale(_baseScale, 0.1f);
+
+    _moveTween = transform.DORotate(new Vector3(0, 0, 10f), 0.15f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
   }
 
   private void HandleMove()
@@ -136,6 +171,9 @@ public class CapybaraBehaviors : MonoBehaviour
     {
       _isMoving = false;
       _idleTimer = Random.Range(_minIdleTime, _maxIdleTime); // define aleatóriamente o tempo de descanço
+
+      _moveTween?.Kill();
+      transform.DORotate(Vector3.zero, 0.2f);
     }
   }
 
@@ -162,6 +200,7 @@ public class CapybaraBehaviors : MonoBehaviour
     _isMoving = false;
     _startPos = transform.position;
     _idleTimer = Random.Range(_minIdleTime, _maxIdleTime);
+    transform.DORotate(Vector3.zero, 0.2f);
   }
 
   public void StopAllTweens()
