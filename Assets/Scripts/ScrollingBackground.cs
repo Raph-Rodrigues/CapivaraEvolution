@@ -10,7 +10,7 @@ public class ScrollingBackground : MonoBehaviour
 
     void Awake()
     {
-        _mat = GetComponent<SpriteRenderer>().material;
+        _mat = GetComponentInChildren<SpriteRenderer>().material;
     }
 
     void Update()
