@@ -103,12 +103,12 @@ public class TutorialCursor : MonoBehaviour
         handSequence = DOTween.Sequence();
         handSequence
             .Append(DOTween.Sequence())
-                .Join(hand.DOScale(0.85f, 0.2f))
-                .Join(hand.DORotate(new Vector3(0, 0, 8), 0.2f))
-            .AppendInterval(0.1f)
+                .Join(hand.DOScale(0.45f, 0.4f))
+                .Join(hand.DORotate(new Vector3(0, 0, 8), 0.4f))
+            .AppendInterval(0.2f)
             .Append(DOTween.Sequence()
-                .Join(hand.DOScale(1f, 0.2f)))
-                .Join(hand.DORotate(new Vector3(0, 0, 3), 0.2f));
+                .Join(hand.DOScale(0.6f, 0.4f)))
+                .Join(hand.DORotate(new Vector3(0, 0, 3), 0.4f));
         
         handSequence.SetLoops(-1, LoopType.Restart);
 
