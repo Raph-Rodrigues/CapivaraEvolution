@@ -178,8 +178,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 1080.00
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ce79b862b2acccf459390049167d7dee, type: 2}
-  m_sharedMaterial: {fileID: 1795686750873968481, guid: ce79b862b2acccf459390049167d7dee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3465,8 +3465,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f17ff9c37cc13a8509b49418c1a0bdee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FusionManager
-  moneyScript: {fileID: 1205703675}
-  shopScript: {fileID: 1205703677}
   _spawnLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -3580,7 +3578,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PauseManager
   _pausePanel: {fileID: 280688781}
-  _volumeSlider: {fileID: 0}
+  _volumeSlider: {fileID: 1155233418}
   _mainScene: Menu
   _isPaused: 0
 --- !u!114 &1205703677
