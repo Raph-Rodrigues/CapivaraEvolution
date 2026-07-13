@@ -21,11 +21,16 @@ public class CapybaraEvolution
 public class FusionManager : MonoBehaviour
 {
   [Header("Variaveis externas")]
-  // [SerializeField] private MoneyGeneration moneyScript;
-  // [SerializeField] private ShopManager shopScript;
+  [SerializeField] private MoneyGeneration moneyScript;
+  [SerializeField] private ShopManager shopScript;
+  [SerializeField] private AudioSource SFXSource;
+  [SerializeField] private AudioClip mergeSFX;
+  [SerializeField] private GameObject DevVara;
 
   [Header("Configurações de Interação")]
   [SerializeField] private LayerMask _spawnLayer;
+  [Header("Ajuste da chance do devinho")]
+  [SerializeField] float spawnChance = 5f;
 
   [Header("Tabela de Evoluções")]
   [SerializeField] private List<CapybaraEvolution> _evolutionList;
@@ -116,7 +121,7 @@ public class FusionManager : MonoBehaviour
 
     if (target != null)
     {
-      if (_draggedCapybara.EvolutionLevel == target.EvolutionLevel)
+      if ((_draggedCapybara.EvolutionLevel == target.EvolutionLevel) && (_draggedCapybara.EvolutionLevel < _evolutionList.Count - 1 ))
       {
         Debug.Log($"[Fusão] Par compatível! {_draggedCapybara.Name} + {target.Name}");
         StartCoroutine(FusionRoutine(_draggedCapybara, target));
@@ -172,17 +177,41 @@ public class FusionManager : MonoBehaviour
     int currentLevel = capy1.EvolutionLevel;
     GameObject survivor = null;
 
-    if (currentLevel < _evolutionList.Count)
+    if (currentLevel < _evolutionList.Count - 1)
     {
       CapybaraEvolution evData = _evolutionList[currentLevel];
 
       if (evData.nextPrefab != null)
       {
-        survivor = Instantiate(evData.nextPrefab, centerPoint, Quaternion.identity);
-        Destroy(capy1.gameObject);
-        Destroy(capy2.gameObject);
-        // moneyScript.CapivaraRemoved(capy1.gameObject);
-        // moneyScript.CapivaraRemoved(capy2.gameObject);
+        if (currentLevel == 3)
+        {
+          float randomI = Random.Range(0, 100);
+
+          if (randomI < spawnChance)
+          {
+            survivor = Instantiate(DevVara, centerPoint, Quaternion.identity);
+            Destroy(capy1.gameObject);
+            Destroy(capy2.gameObject);
+            moneyScript.CapivaraRemoved(capy1.gameObject);
+            moneyScript.CapivaraRemoved(capy2.gameObject);
+          }
+          else
+          {
+            survivor = Instantiate(evData.nextPrefab, centerPoint, Quaternion.identity);
+            Destroy(capy1.gameObject);
+            Destroy(capy2.gameObject);
+            moneyScript.CapivaraRemoved(capy1.gameObject);
+            moneyScript.CapivaraRemoved(capy2.gameObject);
+          }
+        }
+        else
+        {
+          survivor = Instantiate(evData.nextPrefab, centerPoint, Quaternion.identity);
+          Destroy(capy1.gameObject);
+          Destroy(capy2.gameObject);
+          moneyScript.CapivaraRemoved(capy1.gameObject);
+          moneyScript.CapivaraRemoved(capy2.gameObject);
+        }
       }
       else
       {
@@ -206,14 +235,15 @@ public class FusionManager : MonoBehaviour
     if (survivor != null)
     {
       CapybaraBehaviors survivorBehavior = survivor.GetComponent<CapybaraBehaviors>();
-
+      SFXSource.clip = mergeSFX;
+      SFXSource.Play();
       // Impede que a capivara sobrevivente/nova tente andar durante o POP
       if (survivorBehavior != null) survivorBehavior.IsFusing = true;
 
       Vector3 baseScale = survivor.transform.localScale;
       survivor.transform.localScale = Vector3.zero;
       survivor.transform.DOScale(baseScale, 0.25f).SetEase(Ease.OutBack);
-      // moneyScript.CapivaraAdded(survivor);
+      moneyScript.CapivaraAdded(survivor);
 
       int survivorTier;
 
@@ -228,9 +258,9 @@ public class FusionManager : MonoBehaviour
 
       if (survivorTier == 1)
       {
-        // shopScript.SetShopEnable();
+        shopScript.SetShopEnable();
       }
-      // shopScript.NewUnlock(currentLevel);
+      shopScript.NewUnlock(currentLevel);
 
       yield return new WaitForSeconds(0.25f); // Espera o POP terminar
 

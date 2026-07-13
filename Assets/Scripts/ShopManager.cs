@@ -8,6 +8,9 @@ public class ShopManager : MonoBehaviour
     [Header("Variaveis externas")]
     [SerializeField] private MoneyGeneration moneyScript;
     [SerializeField] private CapivaraBoxDrops boxScript;
+    [SerializeField] private AudioSource SFXSource;
+    [SerializeField] private AudioClip OpenSFX;
+    [SerializeField] private AudioClip BoughtSFX;
 
     [Header("Variaveis internas")]
     [SerializeField] private GameObject openShopButton;
@@ -31,12 +34,14 @@ public class ShopManager : MonoBehaviour
         if (isShopEnabled)
         {
             shopUI.SetActive(!shopUI.active);
+            SFXSource.clip = OpenSFX;
+            SFXSource.Play();
         }
     }
 
     public void NewUnlock(int tier)
     {
-        if (prefabsList[tier] && prefabsList[tier].active == false)
+        if (tier < prefabsList.Count && prefabsList[tier] && prefabsList[tier].active == false)
         {
             prefabsList[tier].SetActive(true);
         }
@@ -50,6 +55,8 @@ public class ShopManager : MonoBehaviour
         if (bought)
         {
             boxScript.DropCustomBox(tier);
+            SFXSource.clip = BoughtSFX;
+            SFXSource.Play();
         }
     }
 }

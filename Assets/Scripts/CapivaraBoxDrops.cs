@@ -9,6 +9,8 @@ public class CapivaraBoxDrops : MonoBehaviour
 {
     [Header("Configurações")]
     [SerializeField] private MoneyGeneration moneyScript;
+    [SerializeField] private AudioSource SFXSource;
+    [SerializeField] private AudioClip BoxSFX;
     [SerializeField] private float BoxDropsCooldown = 10f;
     [SerializeField] private float BoxHeightOffSet = 10f;
     [SerializeField] private float LeftLimit = -10f;
@@ -43,17 +45,7 @@ public class CapivaraBoxDrops : MonoBehaviour
         {
             counter = BoxDropsCooldown;
 
-            int chance = UnityEngine.Random.Range(1, 100);
-            
-            if (chance <= 5)
-            {
-                DropBox(5);
-            }
-            else
-            {
-                DropBox(0);
-            }
-            
+            DropBox(0);
         }
     }
 
@@ -94,6 +86,8 @@ public class CapivaraBoxDrops : MonoBehaviour
                 Vector2 spawnPos = boxTransform.position;
                 ParticleEffect(spawnPos);
                 boxTransform.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+                SFXSource.clip = BoxSFX;
+                SFXSource.Play();
                 yield return new WaitForSeconds(0.4f);
                 SpawnCapivara(boxTransform.gameObject, tier);
             }
