@@ -21,16 +21,11 @@ public class CapybaraEvolution
 public class FusionManager : MonoBehaviour
 {
   [Header("Variaveis externas")]
-<<<<<<< Updated upstream
-  // [SerializeField] private MoneyGeneration moneyScript;
-  // [SerializeField] private ShopManager shopScript;
-=======
   [SerializeField] private MoneyGeneration moneyScript;
   [SerializeField] private ShopManager shopScript;
   [SerializeField] private AudioSource SFXSource;
   [SerializeField] private AudioClip mergeSFX;
   [SerializeField] private GameObject DevVara;
->>>>>>> Stashed changes
 
   [Header("Configurações de Interação")]
   [SerializeField] private LayerMask _spawnLayer;
