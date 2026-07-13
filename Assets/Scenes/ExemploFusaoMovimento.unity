@@ -2498,9 +2498,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f17ff9c37cc13a8509b49418c1a0bdee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FusionManager
+  mergeSFX: {fileID: 8300000, guid: 006de72f80ba1f34694532f006a423dc, type: 3}
+  DevVara: {fileID: 3772714105095858356, guid: 829bc4e58099a68f299838d9930f7508, type: 3}
   _spawnLayer:
     serializedVersion: 2
     m_Bits: 128
+  spawnChance: 15
   _evolutionList:
   - currentType: Tier1
     currentSpr: {fileID: 21300000, guid: fe6cfd9a27249154b84313cdeec42293, type: 3}
@@ -2527,11 +2530,11 @@ MonoBehaviour:
     nextSpr: {fileID: 21300000, guid: c2f57e2520e7b21489214820cb3d5bc1, type: 3}
     nextPrefab: {fileID: 3987755496188678447, guid: 48bdb1410ff3f33049c8700716fa2f3f, type: 3}
   - currentType: Tier5
-    currentSpr: {fileID: 21300000, guid: c2f57e2520e7b21489214820cb3d5bc1, type: 3}
-    currentPrefab: {fileID: 3987755496188678447, guid: 48bdb1410ff3f33049c8700716fa2f3f, type: 3}
-    nextType: Tier6
-    nextSpr: {fileID: 21300000, guid: 3d9f4650ce550d44fbf69dec01943900, type: 3}
-    nextPrefab: {fileID: 3772714105095858356, guid: 829bc4e58099a68f299838d9930f7508, type: 3}
+    currentSpr: {fileID: 21300000, guid: 17353e03c9de7804893d57d5cdd3501e, type: 3}
+    currentPrefab: {fileID: 7566048658084635605, guid: 6496a1e861a58763abc1607196f89011, type: 3}
+    nextType: 
+    nextSpr: {fileID: 0}
+    nextPrefab: {fileID: 0}
   _isFusionHappen: 0
 --- !u!4 &1205703673
 Transform:

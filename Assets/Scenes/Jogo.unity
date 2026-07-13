@@ -3746,15 +3746,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f17ff9c37cc13a8509b49418c1a0bdee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FusionManager
-  moneyScript: {fileID: 1205703675}
-  shopScript: {fileID: 1205703677}
-  SFXSource: {fileID: 473399163}
   mergeSFX: {fileID: 8300000, guid: 4481bd996eddb3a41ba3fac6944e9332, type: 3}
   DevVara: {fileID: 3772714105095858356, guid: 829bc4e58099a68f299838d9930f7508, type: 3}
   _spawnLayer:
     serializedVersion: 2
     m_Bits: 128
-  spawnChance: 5
+  spawnChance: 14
   _evolutionList:
   - currentType: Tier1
     currentSpr: {fileID: 21300000, guid: fe6cfd9a27249154b84313cdeec42293, type: 3}

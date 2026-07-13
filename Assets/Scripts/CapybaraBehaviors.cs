@@ -144,9 +144,8 @@ public class CapybaraBehaviors : MonoBehaviour
       _targetPos = randomPoint; // se o caminho tiver livre, o alvo é o ponto aleatório
     }
 
-    _isMoving = true;
-
     StopAllTweens();
+    _isMoving = true;
 
     if (dir.x < 0)
     {
@@ -157,7 +156,8 @@ public class CapybaraBehaviors : MonoBehaviour
       _baseScale.x = Mathf.Abs(_baseScale.x);
     }
 
-    transform.DOScale(_baseScale, 0.1f);
+    transform.localScale = _baseScale;
+    transform.localRotation = Quaternion.identity;
 
     _moveTween = transform.DORotate(new Vector3(0, 0, 10f), 0.15f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
   }
@@ -166,11 +166,25 @@ public class CapybaraBehaviors : MonoBehaviour
   {
     Debug.DrawLine(transform.position, _targetPos, Color.blue);
 
+    // Failsafe: Se ela detectar parede a milímetros dela enquanto caminha, ELA PARA NA HORA!
+    Vector2 dir = (_targetPos - (Vector2)transform.position).normalized;
+    RaycastHit2D instantHit = Physics2D.Raycast(transform.position, dir, 0.15f, _wallLayer);
+
+    if (instantHit.collider != null)
+    {
+      _isMoving = false;
+      _idleTimer = Random.Range(_minIdleTime, _maxIdleTime);
+      _moveTween?.Kill();
+      transform.DORotate(Vector3.zero, 0.2f);
+      return;
+    }
+
     transform.position = Vector2.MoveTowards(transform.position, _targetPos, _speed * Time.deltaTime);
+
     if (Vector2.Distance(transform.position, _targetPos) < 0.1f)
     {
       _isMoving = false;
-      _idleTimer = Random.Range(_minIdleTime, _maxIdleTime); // define aleatóriamente o tempo de descanço
+      _idleTimer = Random.Range(_minIdleTime, _maxIdleTime);
 
       _moveTween?.Kill();
       transform.DORotate(Vector3.zero, 0.2f);
