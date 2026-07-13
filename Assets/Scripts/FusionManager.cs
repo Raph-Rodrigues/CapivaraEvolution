@@ -21,9 +21,9 @@ public class CapybaraEvolution
 public class FusionManager : MonoBehaviour
 {
   [Header("Variaveis externas")]
-  // [SerializeField] private MoneyGeneration moneyScript;
-  // [SerializeField] private ShopManager shopScript;
-  // [SerializeField] private AudioSource SFXSource;
+  [SerializeField] private MoneyGeneration moneyScript;
+  [SerializeField] private ShopManager shopScript;
+  [SerializeField] private AudioSource SFXSource;
   [SerializeField] private AudioClip mergeSFX;
   [SerializeField] private GameObject DevVara;
 
@@ -192,16 +192,16 @@ public class FusionManager : MonoBehaviour
             survivor = Instantiate(DevVara, centerPoint, Quaternion.identity);
             Destroy(capy1.gameObject);
             Destroy(capy2.gameObject);
-            // moneyScript.CapivaraRemoved(capy1.gameObject);
-            // moneyScript.CapivaraRemoved(capy2.gameObject);
+            moneyScript.CapivaraRemoved(capy1.gameObject);
+            moneyScript.CapivaraRemoved(capy2.gameObject);
           }
           else
           {
             survivor = Instantiate(evData.nextPrefab, centerPoint, Quaternion.identity);
             Destroy(capy1.gameObject);
             Destroy(capy2.gameObject);
-            // moneyScript.CapivaraRemoved(capy1.gameObject);
-            // moneyScript.CapivaraRemoved(capy2.gameObject);
+            moneyScript.CapivaraRemoved(capy1.gameObject);
+            moneyScript.CapivaraRemoved(capy2.gameObject);
           }
         }
         else
@@ -209,8 +209,8 @@ public class FusionManager : MonoBehaviour
           survivor = Instantiate(evData.nextPrefab, centerPoint, Quaternion.identity);
           Destroy(capy1.gameObject);
           Destroy(capy2.gameObject);
-          // moneyScript.CapivaraRemoved(capy1.gameObject);
-          // moneyScript.CapivaraRemoved(capy2.gameObject);
+          moneyScript.CapivaraRemoved(capy1.gameObject);
+          moneyScript.CapivaraRemoved(capy2.gameObject);
         }
       }
       else
@@ -243,7 +243,7 @@ public class FusionManager : MonoBehaviour
       Vector3 baseScale = survivor.transform.localScale;
       survivor.transform.localScale = Vector3.zero;
       survivor.transform.DOScale(baseScale, 0.15f).SetEase(Ease.OutBack);
-      // moneyScript.CapivaraAdded(survivor);
+      moneyScript.CapivaraAdded(survivor);
 
       int survivorTier;
 
@@ -258,9 +258,9 @@ public class FusionManager : MonoBehaviour
 
       if (survivorTier == 1)
       {
-        // shopScript.SetShopEnable();
+        shopScript.SetShopEnable();
       }
-      // shopScript.NewUnlock(currentLevel);
+      shopScript.NewUnlock(currentLevel);
 
       yield return new WaitForSeconds(0.15f); // Espera o POP terminar
 

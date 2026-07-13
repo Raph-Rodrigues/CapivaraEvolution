@@ -3746,6 +3746,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f17ff9c37cc13a8509b49418c1a0bdee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FusionManager
+  moneyScript: {fileID: 1205703675}
+  shopScript: {fileID: 1205703677}
+  SFXSource: {fileID: 473399163}
   mergeSFX: {fileID: 8300000, guid: 4481bd996eddb3a41ba3fac6944e9332, type: 3}
   DevVara: {fileID: 3772714105095858356, guid: 829bc4e58099a68f299838d9930f7508, type: 3}
   _spawnLayer:
@@ -4465,9 +4468,9 @@ RectTransform:
   - {fileID: 2039971133}
   m_Father: {fileID: 2067777232}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -301, y: 139}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 40, y: -40}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1499362155
