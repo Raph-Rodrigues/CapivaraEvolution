@@ -21,8 +21,16 @@ public class CapybaraEvolution
 public class FusionManager : MonoBehaviour
 {
   [Header("Variaveis externas")]
+<<<<<<< Updated upstream
   // [SerializeField] private MoneyGeneration moneyScript;
   // [SerializeField] private ShopManager shopScript;
+=======
+  [SerializeField] private MoneyGeneration moneyScript;
+  [SerializeField] private ShopManager shopScript;
+  [SerializeField] private AudioSource SFXSource;
+  [SerializeField] private AudioClip mergeSFX;
+  [SerializeField] private GameObject DevVara;
+>>>>>>> Stashed changes
 
   [Header("Configurações de Interação")]
   [SerializeField] private LayerMask _spawnLayer;
@@ -228,9 +236,9 @@ public class FusionManager : MonoBehaviour
 
       if (survivorTier == 1)
       {
-        // shopScript.SetShopEnable();
+        shopScript.SetShopEnable();
       }
-      // shopScript.NewUnlock(currentLevel);
+      shopScript.NewUnlock(currentLevel);
 
       yield return new WaitForSeconds(0.25f); // Espera o POP terminar
 
