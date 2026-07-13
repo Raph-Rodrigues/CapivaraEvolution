@@ -3746,11 +3746,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f17ff9c37cc13a8509b49418c1a0bdee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FusionManager
-  moneyScript: {fileID: 1205703675}
-  shopScript: {fileID: 1205703677}
-  SFXSource: {fileID: 473399163}
-  mergeSFX: {fileID: 8300000, guid: 4481bd996eddb3a41ba3fac6944e9332, type: 3}
-  DevVara: {fileID: 3772714105095858356, guid: 829bc4e58099a68f299838d9930f7508, type: 3}
+  moneyScript: {fileID: 0}
+  shopScript: {fileID: 0}
+  SFXSource: {fileID: 0}
+  mergeSFX: {fileID: 0}
+  DevVara: {fileID: 0}
   _spawnLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -3906,7 +3906,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 179458452125768988, guid: a72abe2d55ccc1f478135b89dc7e50b8, type: 2}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: e90ecf9bc8dc29f41929a82c15b9cbef, type: 3}
+  m_Resource: {fileID: 8300000, guid: eb18953c0763dab4f86c1ff5aaf08688, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
