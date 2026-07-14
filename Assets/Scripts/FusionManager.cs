@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using DG.Tweening;
+using TMPro;
 
 [System.Serializable]
 public class CapybaraEvolution
@@ -25,12 +26,18 @@ public class FusionManager : MonoBehaviour
   [SerializeField] private ShopManager shopScript;
   [SerializeField] private AudioSource SFXSource;
   [SerializeField] private AudioClip mergeSFX;
-  [SerializeField] private GameObject DevVara;
 
   [Header("Configurações de Interação")]
   [SerializeField] private LayerMask _spawnLayer;
-  [Header("Ajuste da chance do devinho")]
+
+  [Header("Configurações Dev Vara")]
   [SerializeField] float spawnChance = 14f;
+  [SerializeField] private GameObject DevVara;
+  [SerializeField] private GameObject _achievementUI;
+  [SerializeField] private GameObject _devVaraAlertUI;
+  [SerializeField] private GameObject _boxCounter;
+  [SerializeField] private TextMeshProUGUI _devVaraCounterTxt;
+  [SerializeField] private int _devVaraCounter;
 
   [Header("Tabela de Evoluções")]
   [SerializeField] private List<CapybaraEvolution> _evolutionList;
@@ -46,6 +53,11 @@ public class FusionManager : MonoBehaviour
   {
     _input = GetComponent<InputHandler>();
     _mainCamera = Camera.main;
+
+    if (_achievementUI != null) _achievementUI.SetActive(false);
+    if (_devVaraAlertUI != null) _devVaraAlertUI.SetActive(false);
+    if (_boxCounter != null) _boxCounter.SetActive(false);
+    if (_devVaraCounterTxt != null) _devVaraCounterTxt.text = "0";
   }
 
   void Update()
@@ -141,6 +153,51 @@ public class FusionManager : MonoBehaviour
     }
   }
 
+  private void HandleDevVaraSpawnUI()
+  {
+    _devVaraCounter++;
+
+    // atualiza o texto do contador
+    if (_devVaraCounterTxt != null)
+    {
+      _devVaraCounterTxt.text = $"{_devVaraCounter}";
+    }
+
+    if (_devVaraCounter == 1)
+    {
+      // animação da conquista da dev vara
+      if (_achievementUI != null)
+      {
+        _achievementUI.SetActive(true);
+        _achievementUI.transform.localScale = Vector3.zero;
+        _boxCounter.SetActive(true);
+        _boxCounter.transform.localScale = Vector3.zero;
+
+        Sequence seq = DOTween.Sequence();
+        seq.Append(_achievementUI.transform.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBack)); // aparece
+        seq.AppendInterval(2.5f);
+        seq.Append(_achievementUI.transform.DOScale(Vector3.zero, 0.4f).SetEase(Ease.InBack)); // some
+        seq.OnComplete(() => Destroy(_achievementUI)); // destroi permanentemente
+
+        _boxCounter.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+      }
+    }
+    else // alerta de DevVara sendo spawnada
+    {
+      if (_devVaraAlertUI != null)
+      {
+        _devVaraAlertUI.SetActive(true);
+        _devVaraAlertUI.transform.localScale = Vector3.zero;
+
+        Sequence seq = DOTween.Sequence();
+        seq.Append(_devVaraAlertUI.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack)); // aparece rápido
+        seq.AppendInterval(1.5f);
+        seq.Append(_devVaraAlertUI.transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InBack)); // some rápido
+        seq.OnComplete(() => _devVaraAlertUI.SetActive(false)); // desativa para reutilizar
+      }
+    }
+  }
+
   private IEnumerator FusionRoutine(CapybaraBehaviors capy1, CapybaraBehaviors capy2)
   {
     _isFusionHappen = true;
@@ -189,11 +246,15 @@ public class FusionManager : MonoBehaviour
 
           if (randomI < spawnChance)
           {
+            // DevVara
             survivor = Instantiate(DevVara, centerPoint, Quaternion.identity);
             Destroy(capy1.gameObject);
             Destroy(capy2.gameObject);
             moneyScript.CapivaraRemoved(capy1.gameObject);
             moneyScript.CapivaraRemoved(capy2.gameObject);
+
+            // logica da UI 
+            HandleDevVaraSpawnUI();
           }
           else
           {
