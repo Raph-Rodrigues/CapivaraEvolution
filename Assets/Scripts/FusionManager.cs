@@ -183,7 +183,7 @@ public class FusionManager : MonoBehaviour
 
       if (evData.nextPrefab != null)
       {
-        if (currentLevel == 4)
+        if (currentLevel == 3)
         {
           float randomI = Random.Range(0, 100);
 
@@ -235,14 +235,24 @@ public class FusionManager : MonoBehaviour
     if (survivor != null)
     {
       CapybaraBehaviors survivorBehavior = survivor.GetComponent<CapybaraBehaviors>();
-      // SFXSource.clip = mergeSFX;
-      // SFXSource.Play();
+      SFXSource.clip = mergeSFX;
+      SFXSource.Play();
       // Impede que a capivara sobrevivente/nova tente andar durante o POP
       if (survivorBehavior != null) survivorBehavior.IsFusing = true;
 
       Vector3 baseScale = survivor.transform.localScale;
       survivor.transform.localScale = Vector3.zero;
-      survivor.transform.DOScale(baseScale, 0.15f).SetEase(Ease.OutBack);
+
+      // FIX animação de conclusão de fusão
+      Sequence doublePop = DOTween.Sequence();
+
+      // 1° POP
+      doublePop.Append(survivor.transform.DOScale(baseScale * 1.2f, 0.1f).SetEase(Ease.OutQuad));
+      doublePop.Append(survivor.transform.DOScale(baseScale, 0.05f).SetEase(Ease.InQuad));
+      // 2° POP
+      doublePop.Append(survivor.transform.DOScale(baseScale * 1.2f, 0.1f).SetEase(Ease.OutQuad));
+      doublePop.Append(survivor.transform.DOScale(baseScale, 0.05f).SetEase(Ease.InQuad));
+
       moneyScript.CapivaraAdded(survivor);
 
       int survivorTier;
@@ -262,7 +272,7 @@ public class FusionManager : MonoBehaviour
       }
       shopScript.NewUnlock(currentLevel);
 
-      yield return new WaitForSeconds(0.15f); // Espera o POP terminar
+      yield return doublePop.WaitForCompletion(); // Espera o POP terminar
 
       // Libera a capivara e forçar a entrar em Squeeze/Idle
       if (survivorBehavior != null)

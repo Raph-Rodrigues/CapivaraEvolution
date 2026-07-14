@@ -18,6 +18,10 @@ public class CapybaraBehaviors : MonoBehaviour
   [Tooltip("Distância de segurança para não encostar na parede")]
   [SerializeField] private float _obstacleOffset = 0.2f;
 
+  [Header("Sistema de Direção da Sprite")]
+  [SerializeField] private bool _isLookingRight = false;
+  private SpriteRenderer _capySprite;
+
   [Header("Debug da Fusão")]
   [SerializeField] private bool _isFusing;
   public bool IsFusing
@@ -40,7 +44,7 @@ public class CapybaraBehaviors : MonoBehaviour
         StopAllTweens();
 
         transform.DORotate(Vector3.zero, 0.2f);
-        transform.DOScale(new Vector3(Mathf.Abs(_baseScale.x) * 1.2f, _baseScale.y * 1.2f, _baseScale.z), 0.2f).SetEase(Ease.OutBack);
+        transform.DOScale(new Vector3(_baseScale.x * 1.2f, _baseScale.y * 1.2f, _baseScale.z), 0.2f).SetEase(Ease.OutBack);
       }
       else
       {
@@ -53,12 +57,13 @@ public class CapybaraBehaviors : MonoBehaviour
 
           if (hitWall != null)
           {
-            transform.DOMove(_lastValidPos, 0.3f).SetEase(Ease.OutBack);
+            transform.DOMove(_lastValidPos, 0.3f).SetEase(Ease.OutBack).OnComplete(ResetMovementState);
             _startPos = _lastValidPos;
           }
           else
           {
             _startPos = transform.position;
+            ResetMovementState();
           }
         }
       }
@@ -93,6 +98,12 @@ public class CapybaraBehaviors : MonoBehaviour
   void Awake()
   {
     _baseScale = transform.localScale;
+
+    _capySprite = GetComponent<SpriteRenderer>();
+    if (_capySprite == null)
+    {
+      _capySprite = GetComponentInChildren<SpriteRenderer>();
+    }
   }
 
   // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -147,18 +158,24 @@ public class CapybaraBehaviors : MonoBehaviour
     StopAllTweens();
     _isMoving = true;
 
-    if (dir.x < 0)
+    // FIX: capivara olhando pra direção que está se movendo
+    if (_capySprite != null)
     {
-      _baseScale.x = -Mathf.Abs(_baseScale.x);
-    }
-    else if (dir.x > 0)
-    {
-      _baseScale.x = Mathf.Abs(_baseScale.x);
+      if (dir.x < 0) // esquerda
+      {
+        _isLookingRight = false;
+      }
+      else if (dir.x > 0) // direita
+      {
+        _isLookingRight = true;
+      }
+
+      _capySprite.flipX = _isLookingRight;
     }
 
-    transform.localScale = _baseScale;
     transform.localRotation = Quaternion.identity;
 
+    // animação de movimentação
     _moveTween = transform.DORotate(new Vector3(0, 0, 10f), 0.15f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
   }
 
@@ -183,11 +200,7 @@ public class CapybaraBehaviors : MonoBehaviour
 
     if (Vector2.Distance(transform.position, _targetPos) < 0.1f)
     {
-      _isMoving = false;
-      _idleTimer = Random.Range(_minIdleTime, _maxIdleTime);
-
-      _moveTween?.Kill();
-      transform.DORotate(Vector3.zero, 0.2f);
+      ResetMovementState();
     }
   }
 
@@ -208,6 +221,14 @@ public class CapybaraBehaviors : MonoBehaviour
     }
   }
 
+  private void ResetMovementState()
+  {
+    _isMoving = false;
+    _idleTimer = Random.Range(_minIdleTime, _maxIdleTime);
+    StopAllTweens();
+    transform.DORotate(Vector3.zero, 0.2f);
+  }
+
   public void StartIdleAfterFusion()
   {
     _isFusing = false;
@@ -220,6 +241,7 @@ public class CapybaraBehaviors : MonoBehaviour
   public void StopAllTweens()
   {
     _idleTween?.Kill();
+    _moveTween?.Kill();
     transform.DOKill();
   }
 
