@@ -13,6 +13,14 @@ public class CapybaraBehaviors : MonoBehaviour
   [Tooltip("Tempo máximo que fica parada")]
   [SerializeField] private float _maxIdleTime = 3f;
 
+  [Header("Ciclo de vida / Auto-Fusão")]
+  [SerializeField] private float _lifeTime = 60f;
+  [SerializeField] private bool _isDevVara = false;
+  [SerializeField] private float _currentLifeTimer;
+  [SerializeField] private int _maxTier5 = 12;
+  [SerializeField] private bool _isDying = false;
+  [SerializeField] private bool _hasOvercrowdingAlert = false;
+
   [Header("Configurações de Colisão com a Parede")]
   [SerializeField] private LayerMask _wallLayer;
   [Tooltip("Distância de segurança para não encostar na parede")]
@@ -21,13 +29,22 @@ public class CapybaraBehaviors : MonoBehaviour
   [Header("Sistema de Direção da Sprite")]
   [SerializeField] private bool _isLookingRight = false;
   private SpriteRenderer _capySprite;
+  private int _originalSortingOrder;
 
   [Header("Debug da Fusão")]
   [SerializeField] private bool _isFusing;
   public bool IsFusing
   {
     get { return _isFusing; }
-    set { _isFusing = value; }
+    set
+    {
+      _isFusing = value;
+      if (_capySprite != null)
+      {
+        // traz para frente quando está fundindo e retorna para trás após a fusão
+        _capySprite.sortingOrder = _isFusing ? 100 : _originalSortingOrder;
+      }
+    }
   }
   [SerializeField] private bool _isDragged;
   public bool IsDragged
@@ -36,6 +53,10 @@ public class CapybaraBehaviors : MonoBehaviour
     set
     {
       _isDragged = value;
+      if (_capySprite != null)
+      {
+        _capySprite.sortingOrder = _isDragged ? 100 : _originalSortingOrder;
+      }
 
       if (_isDragged)
       {
@@ -104,6 +125,11 @@ public class CapybaraBehaviors : MonoBehaviour
     {
       _capySprite = GetComponentInChildren<SpriteRenderer>();
     }
+
+    if (_capySprite != null)
+    {
+      _originalSortingOrder = _capySprite.sortingOrder;
+    }
   }
 
   // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -111,12 +137,23 @@ public class CapybaraBehaviors : MonoBehaviour
   {
     _startPos = transform.position;
     _isFusing = false;
+    _isDying = false;
+    _hasOvercrowdingAlert = false;
+    _currentLifeTimer = _lifeTime;
+
+    // registra na lista global do jogo assim que nascer
+    if (FusionManager.Instance != null)
+    {
+      FusionManager.Instance.ActiveCapybaras.Add(this);
+    }
   }
 
   // Update is called once per frame
   void Update()
   {
-    if (IsFusing || _isDragged) return;
+    if (IsFusing || _isDragged || _isDying) return;
+
+    HandleLifeCycleTimer();
 
     if (_isMoving)
     {
@@ -126,6 +163,137 @@ public class CapybaraBehaviors : MonoBehaviour
     {
       HandleIdleTimer();
     }
+  }
+
+  private void HandleLifeCycleTimer()
+  {
+    if (_isDevVara) return;
+
+    if (FusionManager.Instance == null) return;
+
+    _currentLifeTimer -= Time.deltaTime;
+
+    if (_currentLifeTimer <= 0)
+    {
+      // Tiers 1, 2 e 3 tentão a fusão automática
+      if (_evolutionLevel < 4)
+      {
+        CapybaraBehaviors target = FindNearestSameTier();
+        if (target != null)
+        {
+          if (FusionManager.Instance.ForceAutoMerge(this, target))
+          {
+            _currentLifeTimer = _lifeTime;
+          }
+          else
+          {
+            _currentLifeTimer = 1.5f;
+          }
+        }
+        else
+        {
+          _currentLifeTimer = 2f; // Tenta novamente em 2 segundos se não achar um par
+        }
+      }
+      else if (_evolutionLevel == 4) // tier 5 morre por super lotação
+      {
+        if (FusionManager.Instance.GetTier5Count() > _maxTier5)
+        {
+          // dispara o alerta e concede 15s de vida extra se ainda não recebeu o aviso
+          if (!_hasOvercrowdingAlert)
+          {
+            FusionManager.Instance.ShowTier5OvercrowdingAlert();
+            _hasOvercrowdingAlert = true;
+            _currentLifeTimer = 15f; // tempo extra
+
+            // Efeito visual de perigo (fica piscando vermelho claro)
+            if (_capySprite != null)
+            {
+              _capySprite.DOColor(new Color(1f, 0.6f, 0.6f), 0.5f).SetLoops(-1, LoopType.Yoyo);
+            }
+          }
+          else
+          {
+            DieFromOvercrowding(); // 15s passaram e ainda tem muita capivara, então morre
+          }
+        }
+        else
+        {
+          // se o jogador resolveu a superlotação antes dos 15s acabarem 
+          if (_hasOvercrowdingAlert)
+          {
+            _hasOvercrowdingAlert = false;
+            if (_capySprite != null)
+            {
+              _capySprite.DOKill(); // mata o efeito visual de piscar 
+              _capySprite.DOColor(Color.white, 0.2f); // volta a cor normal
+            }
+          }
+
+          _currentLifeTimer = 15f;
+        }
+      }
+    }
+  }
+
+  private void DieFromOvercrowding()
+  {
+    _isDying = true;
+    _isMoving = false;
+    StopAllTweens();
+
+    // pinta de vermelho
+    if (_capySprite != null)
+    {
+      _capySprite.DOColor(Color.red, 0.4f);
+    }
+
+    Sequence deathSeq = DOTween.Sequence();
+
+    // da um pulinho e rotaciona para ficar no Chão
+    deathSeq.Append(transform.DOJump(transform.position, 0.5f, 1, 0.5f));
+    deathSeq.Join(transform.DORotate(new Vector3(0, 0, 180f), 0.5f).SetEase(Ease.InQuad));
+
+    // afunda um pouco no chão e encolhe até sumir completamente
+    deathSeq.Append(transform.DOMoveY(transform.position.y - 1f, 0.4f).SetEase(Ease.InExpo));
+    deathSeq.Join(transform.DOScale(Vector3.zero, 0.4f).SetEase(Ease.InExpo));
+
+    // quando terminar tudo, destroi esse objeto
+    deathSeq.OnComplete(() =>
+    {
+      if (FusionManager.Instance != null)
+      {
+        FusionManager.Instance.RemoveAndDestroyCapybara(this);
+      }
+    });
+  }
+
+  private CapybaraBehaviors FindNearestSameTier()
+  {
+    if (FusionManager.Instance == null) return null;
+
+    CapybaraBehaviors nearest = null;
+    float minDistance = float.MaxValue;
+
+    foreach (var capy in FusionManager.Instance.ActiveCapybaras)
+    {
+      if (capy == null) continue;
+
+      // Ignora a si mesma, capivaras em fusão, agarradas ou de nível diferente
+      if (capy == this || capy.IsFusing || capy.IsDragged || capy.EvolutionLevel != this.EvolutionLevel)
+      {
+        continue;
+      }
+
+      float dist = Vector2.Distance(transform.position, capy.transform.position);
+      if (dist < minDistance)
+      {
+        minDistance = dist;
+        nearest = capy;
+      }
+    }
+
+    return nearest;
   }
 
   private void SetNewDestination()
@@ -238,6 +406,11 @@ public class CapybaraBehaviors : MonoBehaviour
     transform.DORotate(Vector3.zero, 0.2f);
   }
 
+  public int GetSortingOrder()
+  {
+    return _capySprite != null ? _capySprite.sortingOrder : 0;
+  }
+
   public void StopAllTweens()
   {
     _idleTween?.Kill();
@@ -248,6 +421,11 @@ public class CapybaraBehaviors : MonoBehaviour
   private void OnDestroy()
   {
     transform.DOKill();
+    // remove da lista ao ser destruído
+    if (FusionManager.Instance != null && FusionManager.Instance.ActiveCapybaras.Contains(this))
+    {
+      FusionManager.Instance.ActiveCapybaras.Remove(this);
+    }
   }
 
   private void OnDrawGizmosSelected()

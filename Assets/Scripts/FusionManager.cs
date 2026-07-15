@@ -21,6 +21,8 @@ public class CapybaraEvolution
 [RequireComponent(typeof(InputHandler))]
 public class FusionManager : MonoBehaviour
 {
+  public static FusionManager Instance { get; private set; }
+
   [Header("Variaveis externas")]
   [SerializeField] private MoneyGeneration moneyScript;
   [SerializeField] private ShopManager shopScript;
@@ -39,9 +41,14 @@ public class FusionManager : MonoBehaviour
   [SerializeField] private TextMeshProUGUI _devVaraCounterTxt;
   [SerializeField] private int _devVaraCounter;
 
+  [Header("Configurações CapiMago (Tier5)")]
+  [SerializeField] private GameObject _tier5AlertUI;
+
   [Header("Tabela de Evoluções")]
   [SerializeField] private List<CapybaraEvolution> _evolutionList;
   public List<CapybaraEvolution> EvolutionList => _evolutionList;
+
+  public List<CapybaraBehaviors> ActiveCapybaras = new List<CapybaraBehaviors>();
 
   private InputHandler _input;
   private Camera _mainCamera;
@@ -51,11 +58,19 @@ public class FusionManager : MonoBehaviour
 
   void Awake()
   {
+    if (Instance != null && Instance != this)
+    {
+      Destroy(gameObject);
+      return;
+    }
+    Instance = this;
+
     _input = GetComponent<InputHandler>();
     _mainCamera = Camera.main;
 
     if (_achievementUI != null) _achievementUI.SetActive(false);
     if (_devVaraAlertUI != null) _devVaraAlertUI.SetActive(false);
+    if (_tier5AlertUI != null) _tier5AlertUI.SetActive(false);
     if (_boxCounter != null) _boxCounter.SetActive(false);
     if (_devVaraCounterTxt != null) _devVaraCounterTxt.text = "0";
   }
@@ -77,21 +92,32 @@ public class FusionManager : MonoBehaviour
     {
       Debug.Log($"[DragAndDrop] Clicou segurando. Posição do Mouse no Mundo: {mouseWorldPos}");
 
-      Collider2D hit = Physics2D.OverlapPoint(mouseWorldPos, _spawnLayer);
+      Collider2D[] hits = Physics2D.OverlapPointAll(mouseWorldPos, _spawnLayer);
 
-      if (hit != null)
+      if (hits.Length > 0)
       {
-        Debug.Log($"[DragAndDrop] Mouse tocou no colisor do objeto: {hit.gameObject.name}");
-        _draggedCapybara = hit.GetComponent<CapybaraBehaviors>();
+        CapybaraBehaviors topCapy = null;
+        int highestOrder = int.MinValue;
 
-        if (_draggedCapybara != null)
+        // Verifica todas as capivaras tocadas e seleciona que está mais a frente
+        foreach (var hit in hits)
         {
-          Debug.Log("[DragAndDrop] SUCESSO! Capivara conectada ao mouse.");
-          _draggedCapybara.IsDragged = true;
+          CapybaraBehaviors capy = hit.GetComponent<CapybaraBehaviors>();
+          if (capy != null && !capy.IsFusing)
+          {
+            int order = capy.GetSortingOrder();
+            if (order > highestOrder)
+            {
+              highestOrder = order;
+              topCapy = capy;
+              Debug.Log("Você selecionou a capivara que está mais a frente!");
+            }
+          }
         }
-        else
+        if (topCapy != null)
         {
-          Debug.LogWarning("[DragAndDrop] O objeto clicado tem colisor, mas NÃO tem o script CapybaraBehaviors!");
+          _draggedCapybara = topCapy;
+          _draggedCapybara.IsDragged = true;
         }
       }
       else
@@ -150,6 +176,48 @@ public class FusionManager : MonoBehaviour
       Debug.Log("[Fusão] Soltou no vazio. Voltando a capivara ao normal.");
       _draggedCapybara.IsDragged = false;
       _draggedCapybara = null;
+    }
+  }
+
+  public bool ForceAutoMerge(CapybaraBehaviors capy1, CapybaraBehaviors capy2)
+  {
+    if (capy1 == null || capy2 == null || capy1.IsFusing || capy2.IsFusing) return false;
+
+    StartCoroutine(FusionRoutine(capy1, capy2));
+    return true;
+  }
+
+  public int GetTier5Count()
+  {
+    int count = 0;
+    foreach (var c in ActiveCapybaras)
+    {
+      if (c != null && c.EvolutionLevel == 4) count++;
+    }
+    return count;
+  }
+
+  public void RemoveAndDestroyCapybara(CapybaraBehaviors capy)
+  {
+    if (capy != null)
+    {
+      moneyScript.CapivaraRemoved(capy.gameObject);
+      Destroy(capy.gameObject);
+    }
+  }
+
+  public void ShowTier5OvercrowdingAlert()
+  {
+    if (_tier5AlertUI != null && !_tier5AlertUI.activeSelf)
+    {
+      _tier5AlertUI.SetActive(true);
+      _tier5AlertUI.transform.localScale = Vector3.zero;
+
+      Sequence seq = DOTween.Sequence();
+      seq.Append(_tier5AlertUI.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack));
+      seq.AppendInterval(2f);
+      seq.Append(_tier5AlertUI.transform.DOScale(Vector3.zero, 0.3f).SetEase(Ease.InBack));
+      seq.OnComplete(() => _tier5AlertUI.SetActive(false));
     }
   }
 

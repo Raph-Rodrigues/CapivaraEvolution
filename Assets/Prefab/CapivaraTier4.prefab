@@ -183,11 +183,17 @@ MonoBehaviour:
   _movementRadius: 17.5
   _minIdleTime: 1
   _maxIdleTime: 3
+  _lifeTime: 40
+  _isDevVara: 0
+  _currentLifeTimer: 0
+  _maxTier5: 12
+  _isDying: 0
   _wallLayer:
     serializedVersion: 2
     m_Bits: 64
   _obstacleOffset: 0.2
+  _isLookingRight: 0
   _isFusing: 0
   _isDragged: 0
   _evolutionLevel: 3
-  _name: Tier2
+  _name: Tier4
