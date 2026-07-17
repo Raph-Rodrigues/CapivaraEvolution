@@ -25,7 +25,7 @@ public class PauseManager : MonoBehaviour
     }
 
     float savedVolume = PlayerPrefs.GetFloat("GameVolume", 1f);
-    AudioListener.volume = savedVolume;
+    AudioListener.volume = Mathf.Pow(savedVolume, 2);
 
     if (_volumeSlider != null)
     {
@@ -35,10 +35,11 @@ public class PauseManager : MonoBehaviour
   }
 
   private void SetVolume(float volume)
-  {
-    AudioListener.volume = volume;
-    PlayerPrefs.SetFloat("GameVolume", volume);
-  }
+{
+    AudioListener.volume = Mathf.Pow(volume, 2); 
+    
+    PlayerPrefs.SetFloat("GameVolume", volume); 
+}
   public void Volume(float volume) => SetVolume(volume);
 
   private void QuitToMainMenu()
