@@ -37,16 +37,16 @@ MonoBehaviour:
     - line: '|   accelerometerFrequency: 60'
     - line: '|   companyName: DefaultCompany'
     - line: '|   productName: CapivaraEvolution'
-    - line: '|   defaultCursor: {instanceID: 0}'
+    - line: '|   defaultCursor: {fileID: 2800000, guid: 4fd8fef346b822e42a7843b10989942c,
+        type: 3}'
     - line: '|   cursorHotspot: {x: 0, y: 0}'
-    - line: '|   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b:
-        0.1254902, a: 1}'
+    - line: '|   m_SplashScreenBackgroundColor: {r: 0, g: 0, b: 0, a: 1}'
     - line: '|   m_ShowUnitySplashScreen: 1'
     - line: '|   m_ShowUnitySplashLogo: 1'
     - line: '|   m_SplashScreenOverlayOpacity: 1'
     - line: '|   m_SplashScreenAnimation: 1'
     - line: '|   m_SplashScreenLogoStyle: 1'
-    - line: '|   m_SplashScreenDrawMode: 0'
+    - line: '|   m_SplashScreenDrawMode: 1'
     - line: '|   m_SplashScreenBackgroundAnimationZoom: 1'
     - line: '|   m_SplashScreenLogoAnimationZoom: 1'
     - line: '|   m_SplashScreenBackgroundLandscapeAspect: 1'
@@ -63,7 +63,16 @@ MonoBehaviour:
     - line: '|     y: 0'
     - line: '|     width: 1'
     - line: '|     height: 1'
-    - line: '|   m_SplashScreenLogos: []'
+    - line: '|   m_SplashScreenLogos:'
+    - line: '|   - logo: {fileID: 10404, guid: 0000000000000000f000000000000000,
+        type: 0}'
+    - line: '|     duration: 2'
+    - line: '|   - logo: {fileID: 2845970054093281033, guid: 6a73e92138eb38946814ec183aedf603,
+        type: 3}'
+    - line: '|     duration: 2'
+    - line: '|   - logo: {fileID: 8795700292150438670, guid: c5a0915aed9f7fa4d8186099c6eed59b,
+        type: 3}'
+    - line: '|     duration: 2'
     - line: '|   m_VirtualRealitySplashScreen: {instanceID: 0}'
     - line: '|   defaultScreenWidth: 1920'
     - line: '|   defaultScreenHeight: 1080'
